@@ -1,6 +1,6 @@
 {
     "webPort": "3000",
     "dbHost": "localhost",
-    "dbUser": "todolist_user",
-    "dbDatabase": "todolist"
+    "dbUser": "studentenhuis_user",
+    "dbDatabase": "studentenhuis"
 }
