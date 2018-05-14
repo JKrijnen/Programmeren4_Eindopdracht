@@ -4,7 +4,7 @@ module.exports = {
 
     getAll(req, res, next) {
         console.log('todo.controller getAll');
-        db.query('SELECT * FROM todos', function (error, rows, fields) {
+        db.query('SELECT * FROM user', function (error, rows, fields) {
             if (error) {
                 next(error);
             } else {
