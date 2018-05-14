@@ -20,7 +20,6 @@ routes.post('/hello', function (req, res) {
 
 	res.status(200);
 	res.json(mijnObject);
-
 });
 
 routes.get('/hello/error', function (req, res, next) {
