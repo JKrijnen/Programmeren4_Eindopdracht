@@ -6,7 +6,6 @@ var todos_v1 = require('./api/todos.api');
 var status_v1 = require('./api/status.api');
 var bodyParser = require('body-parser')
 var logger = require('morgan');
-
 var config = require('./config/config');
 var db = require('./config/db.improved');
 
