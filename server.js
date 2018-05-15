@@ -1,14 +1,12 @@
-// 
-var http = require('http');
-var express = require('express');
-var routes_v1 = require('./api/routes_v1');
-var todos_v1 = require('./api/todos.api');
-var status_v1 = require('./api/status.api');
-var studentenhuis_api = require('./api/studentenhuis.api');
-var bodyParser = require('body-parser');
-var logger = require('morgan');
-var config = require('./config/config');
-var db = require('./config/db.improved');
+const http = require('http');
+const express = require('express');
+const studentenhuis_api = require('./api/studentenhuis.api');
+const bodyParser = require('body-parser');
+const logger = require('morgan');
+const config = require('./config/config');
+const db = require('./config/db.improved');
+const AuthController = require('./controllers/AuthController');
+const error = require('./model/ApiError');
 
 const port = process.env.PORT || config.webPort || 4001
 
@@ -38,25 +36,17 @@ app.use('/api*', function (req, resp, next) {
 	next();
 });
 
+app.use('/api', auth_routes);
+app.all('*', AuthController.validateToken);
+
+
 // Installeer de api endpoint routes die we willen aanbieden 
 app.use('/api/studentenhuis', studentenhuis_api);
-app.use('/api/v1', todos_v1);
-app.use('/api/v1', status_v1);
-
-// Logregel, wordt getoond wanneer geen andere routes matchten
-// EN er geen foutsituatie is - anders wordt de error handler aangeroepen  
-app.use('*', function (req, res, next) {
-	res.status(404) //return 404 for a 404 route, not 200!
-		.json({
-			message: 'Geen enkele endpoint matcht!'
-		})
-		.end();
-});
 
 // Error handler, handelt alle foutsituaties af waarbij error !== null
 app.use(function (error, req, res, next) {
 	console.error(error.toString());
-	res.status(500).json({
+	res.status(error.code).json({
 		message: error
 	}).end();
 });

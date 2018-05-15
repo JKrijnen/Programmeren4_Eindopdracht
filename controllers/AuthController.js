@@ -1,6 +1,7 @@
 const auth = require("./Authentication")
 const ApiError = require("../model/ApiError")
 const loginList = []
+
 module.exports = {
     validateToken(req, res, next) {
         console.log("validating token")
