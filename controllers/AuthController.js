@@ -1,4 +1,4 @@
-const auth = require("./Authentication")
+const auth = require("../Auth/Authentication")
 const ApiError = require("../model/ApiError")
 const loginList = []
 

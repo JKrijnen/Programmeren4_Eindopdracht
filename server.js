@@ -7,6 +7,7 @@ const config = require('./config/config');
 const db = require('./config/db.improved');
 const AuthController = require('./controllers/AuthController');
 const error = require('./model/ApiError');
+const auth_routes = require('./routes/auth_routes');
 
 const port = process.env.PORT || config.webPort || 4001
 
