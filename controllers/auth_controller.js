@@ -4,6 +4,8 @@ const db = require('../config/db.improved');
 const sha = require('sha.js');
 let query;
 let hashedPass;
+
+
 module.exports = {
     validateToken(req, res, next) {
         console.log("validating token")
@@ -21,7 +23,7 @@ module.exports = {
         });
     },
     login(req, res, next) {
-        (hashedPass = sha('sha256').update(req.body.password).digest('hex'))
+        hashedPass = sha('sha256').update(req.body.password).digest('hex')
             (query = {
                 sql: 'SELECT * FROM user WHERE Email = ? AND Password = ?',
                 values: [req.body.email, hashedPass],
