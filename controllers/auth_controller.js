@@ -2,7 +2,8 @@ const auth = require("../Auth/Authentication");
 const ApiError = require("../model/ApiError");
 const db = require('../config/db.improved');
 const sha = require('sha.js');
-
+let query;
+let hashedPass;
 module.exports = {
     validateToken(req, res, next) {
         console.log("validating token")
@@ -20,17 +21,24 @@ module.exports = {
         });
     },
     login(req, res, next) {
-        if (loginList[req.body.username] === req.body.password) {
-            res.status(200).json(auth.encodeToken(req.body.username)).end();
-        } else {
-            next();
-        }
+        (hashedPass = sha('sha256').update(req.body.password).digest('hex'))
+            (query = {
+                sql: 'SELECT * FROM user WHERE Email = ? AND Password = ?',
+                values: [req.body.email, hashedPass],
+                timeout: 2000
+            })
+
+            db.query(query, function (error, rows, fields) {
+            if(rows.length !== 0){
+                res.status(200).json(auth.encodeToken(req.body.email)).end();
+            }else {next(new ApiError("Geen goede login"), 401)}
+        })
     },
     register(req, res, next) {
 
         console.log(req.body.email, req.body.firstname, req.body.lastname, req.body.password);
         if (req.body.email != undefined && req.body.password != undefined) {
-            var query = {
+            query = {
                 sql: 'SELECT * FROM user WHERE Email = ?',
                 values: [req.body.email],
                 timeout: 2000
@@ -39,7 +47,7 @@ module.exports = {
                 console.log(rows)
                 if (rows.length === 0) {
                     var user = req.body;
-                    var hashedPass = sha('sha256').update(req.body.password).digest('hex');
+                    hashedPass = sha('sha256').update(req.body.password).digest('hex');
                     query = {
                         sql: 'INSERT INTO user (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?)',
                         values: [user.firstname, user.lastname, user.email, hashedPass],

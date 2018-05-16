@@ -9,7 +9,7 @@ const AuthController = require('../controllers/AuthController');
 let routes = express.Router();
 
 //The request
-routes.post('/login', AuthController.login);
-routes.post('/register', AuthController.register);
+routes.post('/login', auth_controller.login);
+routes.post('/register', auth_controller.register);
 
 module.exports = routes;
