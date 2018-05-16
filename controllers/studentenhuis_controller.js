@@ -1,5 +1,7 @@
 var db = require('../config/db.improved');
 const ApiError = require("../model/ApiError");
+const auth = require("../Auth/Authentication");
+const sql = require('mysql');
 module.exports = {
 
     getAll(req, res, next) {
@@ -49,18 +51,36 @@ module.exports = {
         })
     },
 
+    create(req, res, next) {
+            let token = req.header("x-access-token") || '';
+            auth.decodeToken(token, (err, payload) => {
+                if (err) {
+                    const error = new ApiError(err.message || err, 401);
+                    next(error);
+                } else {
+                    console.log("authenticated! Payload = ")
+                    console.dir(payload)
 
+                    query = {
+                        sql: 'INSERT INTO studentenhuis (Naam, Adres, UserID, ID) VALUES (?, ?, ?, ?,)',
+                        values: [req.body.Naam, req.body.Adres, payload.jti, req.params.id],
+                        timeout: 2000
+                    };
+                    db.query(query, function (error, rows, fields) {
+                        if (error) {
+                            res.status(400);
+                            res.json(error);
+                        } else {
+                            console.log(rows);
+                            res.status(200).json({
+                                "ID": rows.insertId,
+                                "Naam": req.body.Naam,
+                                "Adres": req.body.Adres
+                            }).end();
+                        };
+                    });
 
-
-
-
-
-
-
-
-
-
-
-
-
+                }
+            });
+        },
  }

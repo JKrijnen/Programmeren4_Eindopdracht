@@ -9,7 +9,7 @@ const auth_controller = require('./controllers/auth_controller');
 const auth_routes = require('./routes/auth_routes');
 const studentenhuis_controller = require('./controllers/studentenhuis_controller');
 const studentenhuis_routes = require('./routes/studentenhuis_routes');
-
+const maaltijd_routes = require('./routes/maaltijd_routes');
 
 
 
@@ -47,6 +47,7 @@ app.all('*', auth_controller.validateToken);
 
 // Installeer de api endpoint routes die we willen aanbieden 
 app.use('/api/studentenhuis', studentenhuis_routes);
+app.use('/api/studentenhuis', maaltijd_routes);
 
 // Error handler, handelt alle foutsituaties af waarbij error !== null
 app.use(function (error, req, res, next) {

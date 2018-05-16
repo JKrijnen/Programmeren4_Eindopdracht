@@ -15,7 +15,7 @@ var studentenhuis_controller = require('../controllers/studentenhuis_controller'
 
  routes.put('/:id', studentenhuis_controller.put);
 
-// routes.post('/', studentenhuis_controller.create);
+ routes.post('/', studentenhuis_controller.create);
 
 // routes.delete('/:id', studentenhuis_controller.delete);
 
