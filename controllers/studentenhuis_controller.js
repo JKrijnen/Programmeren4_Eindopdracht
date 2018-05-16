@@ -58,12 +58,9 @@ module.exports = {
                     const error = new ApiError(err.message || err, 401);
                     next(error);
                 } else {
-                    console.log("authenticated! Payload = ")
-                    console.dir(payload)
-
                     query = {
-                        sql: 'INSERT INTO studentenhuis (Naam, Adres, UserID, ID) VALUES (?, ?, ?, ?,)',
-                        values: [req.body.Naam, req.body.Adres, payload.jti, req.params.id],
+                        sql: 'INSERT INTO `studentenhuis` (Naam, Adres, UserID) VALUES (?, ?, ?)',
+                        values: [req.body.Naam, req.body.Adres, payload.jti],
                         timeout: 2000
                     };
                     db.query(query, function (error, rows, fields) {
