@@ -1,14 +1,25 @@
 const http = require('http');
 const express = require('express');
-const studentenhuis_api = require('./routes/studentenhuis_routes');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const config = require('./config/config');
 const db = require('./config/db.improved');
+<<<<<<< HEAD
 const AuthController = require('./controllers/auth_controller');
+=======
+>>>>>>> development
 const error = require('./model/ApiError');
+const auth_controller = require('./controllers/auth_controller');
 const auth_routes = require('./routes/auth_routes');
+<<<<<<< HEAD
 const maaltijd_routes = require('./routes/maaltijd_routes');
+=======
+const studentenhuis_controller = require('./controllers/studentenhuis_controller');
+const studentenhuis_routes = require('./routes/studentenhuis_routes');
+
+
+
+>>>>>>> development
 
 const port = process.env.PORT || config.webPort || 4001
 
@@ -39,12 +50,16 @@ app.use('/api*', function (req, resp, next) {
 });
 
 app.use('/api', auth_routes);
-app.all('*', AuthController.validateToken);
+app.all('*', auth_controller.validateToken);
 
 
 // Installeer de api endpoint routes die we willen aanbieden 
+<<<<<<< HEAD
 app.use('/api/studentenhuis', studentenhuis_api);
 app.use('/api/studentenhuis', maaltijd_routes);
+=======
+app.use('/api/studentenhuis', studentenhuis_routes);
+>>>>>>> development
 
 // Error handler, handelt alle foutsituaties af waarbij error !== null
 app.use(function (error, req, res, next) {
