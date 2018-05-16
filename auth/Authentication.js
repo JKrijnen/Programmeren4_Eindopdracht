@@ -2,7 +2,7 @@
 // Authentication using JSON Web Token (JWT)
 // Save this e.g. as ./util/auth/authentication.js
 //
-const settings = require('../config/config')
+const settings = require('../../config/config')
 const moment = require('moment')
 const jwt = require('jwt-simple')
 
