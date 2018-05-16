@@ -22,20 +22,21 @@ module.exports = {
             }
         });
     },
+
     login(req, res, next) {
         hashedPass = sha('sha256').update(req.body.password).digest('hex')
-            (query = {
+            query = {
                 sql: 'SELECT * FROM user WHERE Email = ? AND Password = ?',
                 values: [req.body.email, hashedPass],
                 timeout: 2000
-            })
-
+            }
             db.query(query, function (error, rows, fields) {
             if(rows.length !== 0){
                 res.status(200).json(auth.encodeToken(req.body.email)).end();
-            }else {next(new ApiError("Geen goede login"), 401)}
+            }else {next(new ApiError("Geen goede login", 401))}
         })
     },
+
     register(req, res, next) {
 
         console.log(req.body.email, req.body.firstname, req.body.lastname, req.body.password);
