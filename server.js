@@ -1,6 +1,6 @@
 const http = require('http');
 const express = require('express');
-const studentenhuis_api = require('./api/studentenhuis.api');
+const studentenhuis_api = require('./routes/studentenhuis_routes');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const config = require('./config/config');
