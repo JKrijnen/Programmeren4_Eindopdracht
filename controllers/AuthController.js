@@ -26,9 +26,9 @@ module.exports = {
         }
     },
     register(req, res, next) {
-        if (loginList[req.body.username] === undefined) {
+        if (loginList[req.body.username] === undefined && req.body.username != null && req.body.password != null) {
             loginList[req.body.username] = req.body.password
-            let token = auth.encodeToken(req.body.username);
+            let token = auth.encodeToken(req.body.username); 
             res.status(200).json({ "token": token }).end();
             res.status(200).json({}).end();
         } else {
