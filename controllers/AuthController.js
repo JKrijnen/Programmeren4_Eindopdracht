@@ -1,6 +1,7 @@
-const auth = require("../Auth/Authentication")
-const ApiError = require("../model/ApiError")
-const loginList = []
+const auth = require("../Auth/Authentication");
+const ApiError = require("../model/ApiError");
+const db = require('../config/db.improved');
+const sha = require('sha.js');
 
 module.exports = {
     validateToken(req, res, next) {
@@ -26,13 +27,40 @@ module.exports = {
         }
     },
     register(req, res, next) {
-        if (loginList[req.body.username] === undefined && req.body.username != null && req.body.password != null) {
-            loginList[req.body.username] = req.body.password
-            let token = auth.encodeToken(req.body.username); 
-            res.status(200).json({ "token": token }).end();
-            res.status(200).json({}).end();
-        } else {
-            next(new ApiError("Username is already taken", 401));
-        }
+
+        console.log(req.body.email, req.body.firstname, req.body.lastname, req.body.password);
+        if (req.body.email != undefined && req.body.password != undefined) {
+            var query = {
+                sql: 'SELECT * FROM user WHERE Email = ?',
+                values: [req.body.email],
+                timeout: 2000
+            };
+            db.query(query, function(error, rows, fields){
+                console.log(rows)
+                if (rows.length === 0) {
+                    var user = req.body;
+                    var hashedPass = sha('sha256').update(req.body.password).digest('hex');
+                    query = {
+                        sql: 'INSERT INTO user (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?)',
+                        values: [user.firstname, user.lastname, user.email, hashedPass],
+                        timeout: 2000
+                    };
+                    db.query(query, function (error, rows, fields) {
+                        if (error) {
+                            res.status(400);
+                            res.json(error);
+                        } else {
+                            console.log(rows);
+                            let token = auth.encodeToken(req.body.email);
+                            res.status(200).json({ "token": token }).end();
+                        };
+                    });
+
+                } else {
+                    next(new ApiError('Email is al in gebruik.', 409))
+                };
+            });
+            }
+        
     }
 }
