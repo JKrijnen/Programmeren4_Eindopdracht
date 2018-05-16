@@ -3,7 +3,7 @@
  */
 //Require for the express module
 const express = require('express');
-const AuthController = require('../controllers/AuthController');
+const auth_controller = require('../controllers/auth_controller');
 
 //Creating the express Router
 let routes = express.Router();

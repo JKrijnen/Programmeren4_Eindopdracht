@@ -5,9 +5,10 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const config = require('./config/config');
 const db = require('./config/db.improved');
-const AuthController = require('./controllers/AuthController');
+const AuthController = require('./controllers/auth_controller');
 const error = require('./model/ApiError');
 const auth_routes = require('./routes/auth_routes');
+const maaltijd_routes = require('./routes/maaltijd_routes');
 
 const port = process.env.PORT || config.webPort || 4001
 
@@ -43,6 +44,7 @@ app.all('*', AuthController.validateToken);
 
 // Installeer de api endpoint routes die we willen aanbieden 
 app.use('/api/studentenhuis', studentenhuis_api);
+app.use('/api/studentenhuis', maaltijd_routes);
 
 // Error handler, handelt alle foutsituaties af waarbij error !== null
 app.use(function (error, req, res, next) {

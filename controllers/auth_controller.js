@@ -32,7 +32,7 @@ module.exports = {
 
             db.query(query, function (error, rows, fields) {
             if(rows.length !== 0){
-                res.status(200).json(auth.encodeToken(req.body.email)).end();
+                res.status(200).json(auth.encodeToken(req.body.email, rows.insertId)).end();
             }else {next(new ApiError("Geen goede login"), 401)}
         })
     },
@@ -61,7 +61,7 @@ module.exports = {
                             res.json(error);
                         } else {
                             console.log(rows);
-                            let token = auth.encodeToken(req.body.email);
+                            let token = auth.encodeToken(req.body.email, rows.insertId);
                             res.status(200).json({ "token": token }).end();
                         };
                     });

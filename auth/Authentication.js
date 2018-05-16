@@ -9,13 +9,14 @@ const jwt = require('jwt-simple')
 //
 // Encode (from username to token)
 //
-function encodeToken(username) {
-    const playload = {
+function encodeToken(username, id) {
+    const payload = {
         exp: moment().add(10, 'days').unix(),
         iat: moment().unix(),
-        sub: username   // or any object you choose! 
+        sub: username,   // or any object you choose!
+        jti: id
     }
-    return jwt.encode(playload, settings.secretkey)
+    return jwt.encode(payload, settings.secretkey)
 }
 
 //
