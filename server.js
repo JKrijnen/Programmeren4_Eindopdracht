@@ -1,13 +1,17 @@
 const http = require('http');
 const express = require('express');
-const studentenhuis_api = require('./routes/studentenhuis_routes');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const config = require('./config/config');
 const db = require('./config/db.improved');
-const AuthController = require('./controllers/AuthController');
 const error = require('./model/ApiError');
+const auth_controller = require('./controllers/auth_controller');
 const auth_routes = require('./routes/auth_routes');
+const studentenhuis_controller = require('./controllers/studentenhuis_controller');
+const studentenhuis_routes = require('./routes/studentenhuis_routes');
+
+
+
 
 const port = process.env.PORT || config.webPort || 4001
 
@@ -38,11 +42,11 @@ app.use('/api*', function (req, resp, next) {
 });
 
 app.use('/api', auth_routes);
-app.all('*', AuthController.validateToken);
+app.all('*', auth_controller.validateToken);
 
 
 // Installeer de api endpoint routes die we willen aanbieden 
-app.use('/api/studentenhuis', studentenhuis_api);
+app.use('/api/studentenhuis', studentenhuis_routes);
 
 // Error handler, handelt alle foutsituaties af waarbij error !== null
 app.use(function (error, req, res, next) {
